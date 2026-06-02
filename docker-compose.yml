@@ -1,0 +1,100 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./data.sql:/docker-entrypoint-initdb.d/02-data.sql
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+        mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY} &&
+        mc mb --ignore-existing local/${MINIO_BUCKET};
+        exit 0
+      "
+
+  backend:
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      STORAGE_ENDPOINT: http://minio:9000
+      STORAGE_BUCKET: ${MINIO_BUCKET}
+      STORAGE_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      STORAGE_SECRET_KEY: ${MINIO_SECRET_KEY}
+      APP_JWT_SECRET: ${JWT_SECRET}
+      APP_JWT_ACCESS_TOKEN_EXPIRY: 900000
+      APP_JWT_REFRESH_TOKEN_EXPIRY: 604800000
+      AI_PROVIDER: ${AI_PROVIDER:-gemini}
+      AI_GEMINI_API_KEY: ${AI_GEMINI_API_KEY:-}
+      AI_OPENAI_API_KEY: ${AI_OPENAI_API_KEY:-}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8080
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
