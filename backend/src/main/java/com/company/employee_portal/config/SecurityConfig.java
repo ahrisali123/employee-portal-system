@@ -64,8 +64,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-                "https://shanai-portal.com",
-                "https://www.shanai-portal.com",
+                "https://shanai-portal.online",
+                "https://www.shanai-portal.online",
                 "http://localhost:3000"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
