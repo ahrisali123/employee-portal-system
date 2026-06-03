@@ -18,6 +18,9 @@ public class MinioConfig {
     @Value("${storage.endpoint}")
     private String endpoint;
 
+    @Value("${storage.public-endpoint:${storage.endpoint}}")
+    private String publicEndpoint;
+
     @Value("${storage.access-key}")
     private String accessKey;
 
@@ -38,7 +41,7 @@ public class MinioConfig {
     @Bean
     public S3Presigner s3Presigner() {
         return S3Presigner.builder()
-                .endpointOverride(URI.create(endpoint))
+                .endpointOverride(URI.create(publicEndpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(accessKey, secretKey)))
                 .region(Region.US_EAST_1)
