@@ -33,6 +33,9 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      MINIO_DOMAIN: shanai-portal.online
+      MINIO_BROWSER_REDIRECT_URL: https://shanai-portal.online/minio
+      MINIO_SERVER_URL: https://shanai-portal.online/minio
     volumes:
       - minio_data:/data
     ports:
