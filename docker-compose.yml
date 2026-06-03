@@ -33,9 +33,8 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
-      MINIO_DOMAIN: shanai-portal.online
-      MINIO_BROWSER_REDIRECT_URL: https://shanai-portal.online/minio
-      MINIO_SERVER_URL: https://shanai-portal.online/minio
+      MINIO_BROWSER_REDIRECT_URL: https://minio.shanai-portal.online
+      MINIO_SERVER_URL: https://minio.shanai-portal.online
     volumes:
       - minio_data:/data
     ports:
@@ -75,7 +74,7 @@ services:
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
       STORAGE_ENDPOINT: http://minio:9000
-      STORAGE_PUBLIC_ENDPOINT: https://shanai-portal.online/minio
+      STORAGE_PUBLIC_ENDPOINT: https://minio.shanai-portal.online
       STORAGE_BUCKET: ${MINIO_BUCKET}
       STORAGE_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       STORAGE_SECRET_KEY: ${MINIO_SECRET_KEY}
