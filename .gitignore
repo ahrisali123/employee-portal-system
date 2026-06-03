@@ -10,7 +10,7 @@ backend/*.log
 .env
 .env.*
 frontend/.env
-frontend/.env.*
+frontend/.env.local
 backend/.env
 backend/.env.*
 
