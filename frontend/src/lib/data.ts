@@ -5,20 +5,20 @@ export const TICKET_CATEGORIES = [
     types: [
       { code: 'ANNUAL_LEAVE', label: '年次有給休暇' },
       { code: 'SICK_LEAVE', label: '病気休暇' },
-      { code: 'COMP_LEAVE', label: '代休' },
+      { code: 'COMPENSATORY_LEAVE', label: '代休' },
       { code: 'SPECIAL_LEAVE', label: '特別休暇' },
-      { code: 'ABSENCE', label: '欠勤' },
+      { code: 'UNPAID_LEAVE', label: '欠勤' },
     ],
   },
   {
     key: 'family',
     label: '育児・介護・慶弔',
     types: [
-      { code: 'MATERNITY', label: '産前産後休業' },
-      { code: 'PATERNITY', label: '育児休業（父親）' },
-      { code: 'CHILDCARE', label: '育児休業' },
-      { code: 'NURSING', label: '介護休業' },
-      { code: 'BEREAVEMENT', label: '忌引休暇' },
+      { code: 'MATERNITY_LEAVE', label: '産前産後休業' },
+      { code: 'PATERNITY_LEAVE', label: '育児休業（父親）' },
+      { code: 'CHILDCARE_LEAVE', label: '育児休業' },
+      { code: 'NURSING_CARE_LEAVE', label: '介護休業' },
+      { code: 'BEREAVEMENT_LEAVE', label: '忌引休暇' },
     ],
   },
   {
@@ -35,7 +35,7 @@ export const TICKET_CATEGORIES = [
     key: 'travel',
     label: '出張・テレワーク',
     types: [
-      { code: 'TELEWORK', label: 'テレワーク' },
+      { code: 'REMOTE_WORK', label: 'テレワーク' },
       { code: 'BUSINESS_TRIP', label: '出張' },
     ],
   },
@@ -53,11 +53,11 @@ export const TICKET_CATEGORIES = [
     types: [
       { code: 'TRAINING', label: '研修' },
       { code: 'COMMUTE_CHANGE', label: '通勤経路変更' },
-      { code: 'ADVANCE_SALARY', label: '給与前払い' },
+      { code: 'SALARY_ADVANCE', label: '給与前払い' },
       { code: 'OTHER', label: 'その他' },
     ],
   },
-];
+] as const;
 
 export const TYPE_INDEX: Record<string, { code: string; label: string; category: string; categoryKey: string }> = {};
 TICKET_CATEGORIES.forEach((c) =>

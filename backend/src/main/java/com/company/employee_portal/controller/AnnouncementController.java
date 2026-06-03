@@ -75,7 +75,7 @@ public class AnnouncementController {
     }
 
     @PostMapping("/{id}/acknowledge")
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     public ResponseEntity<ApiResponse<Void>> acknowledge(@PathVariable UUID id) {
 
         announcementService.acknowledge(id);

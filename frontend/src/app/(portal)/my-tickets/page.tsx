@@ -54,13 +54,18 @@ export default function MyTicketsPage() {
 
   const filtered = useMemo(
     () =>
-      tickets.filter(
-        (t) =>
-          (!statusFilter || t.status === statusFilter) &&
-          (!q ||
-            t.title.includes(q) ||
-            t.id.toLowerCase().includes(q.toLowerCase())),
-      ),
+      tickets
+        .filter(
+          (t) =>
+            (!statusFilter || t.status === statusFilter) &&
+            (!q ||
+              t.title.includes(q) ||
+              t.id.toLowerCase().includes(q.toLowerCase())),
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        ),
     [tickets, statusFilter, q],
   );
 

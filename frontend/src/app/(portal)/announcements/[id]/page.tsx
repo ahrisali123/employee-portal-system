@@ -105,7 +105,7 @@ export default function AnnouncementDetailPage() {
 
   const cat = ANN_CAT_INDEX[ann.category];
   const acknowledged = ann.acknowledged;
-  const needsAcknowledge = ann.requiresAcknowledge && !acknowledged && user?.activeRole !== 'ADMIN';
+  const needsAcknowledge = ann.requiresAcknowledge && !acknowledged && !ann.ownAnnouncement;
   const deptLabel = ann.targetDepartments.length === 0 ? '全社' : ann.targetDepartments.map((d) => d.name).join(', ');
   const isDraft = ann.status === 'DRAFT';
 
@@ -255,7 +255,7 @@ export default function AnnouncementDetailPage() {
                 </button>
               </div>
             )}
-            {acknowledged && ann.requiresAcknowledge && user?.activeRole !== 'ADMIN' && (
+            {acknowledged && ann.requiresAcknowledge && !ann.ownAnnouncement && (
               <div className="flex items-center px-5 py-3.5 border-t border-line bg-status-approved-bg">
                 <div className="flex items-center gap-1.5 text-xs text-status-approved-fg">
                   <Icon name="check" size={14} /> 確認済み

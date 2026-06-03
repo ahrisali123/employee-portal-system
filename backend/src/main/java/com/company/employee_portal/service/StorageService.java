@@ -26,9 +26,6 @@ public class StorageService {
     @Value("${storage.bucket}")
     private String bucket;
 
-    @Value("${storage.public-endpoint}")
-    private String publicEndpoint;
-
     @Value("${spring.servlet.multipart.max-file-size}")
     private DataSize maxFileSize;
 
@@ -81,7 +78,7 @@ public class StorageService {
                             .key(key)
                             .build())
                     .build();
-            String url = s3Presigner.presignGetObject(presignRequest).url().toString();
+
             return s3Presigner
 		    .presignGetObject(presignRequest)
         	    .url()
