@@ -113,23 +113,6 @@ CREATE TABLE eps.announcements (
 ALTER TABLE eps.announcements OWNER TO eps;
 
 --
--- Name: attachments; Type: TABLE; Schema: eps; Owner: eps
---
-
-CREATE TABLE eps.attachments (
-    id uuid NOT NULL,
-    file_name character varying(255) NOT NULL,
-    file_size bigint,
-    file_type character varying(255),
-    key character varying(255) NOT NULL,
-    uploaded_at timestamp(6) without time zone,
-    ticket_id uuid NOT NULL
-);
-
-
-ALTER TABLE eps.attachments OWNER TO eps;
-
---
 -- Name: departments; Type: TABLE; Schema: eps; Owner: eps
 --
 
@@ -295,14 +278,6 @@ ALTER TABLE ONLY eps.announcement_reads
 
 ALTER TABLE ONLY eps.announcements
     ADD CONSTRAINT announcements_pkey PRIMARY KEY (id);
-
-
---
--- Name: attachments attachments_pkey; Type: CONSTRAINT; Schema: eps; Owner: eps
---
-
-ALTER TABLE ONLY eps.attachments
-    ADD CONSTRAINT attachments_pkey PRIMARY KEY (id);
 
 
 --
@@ -615,14 +590,6 @@ ALTER TABLE ONLY eps.user_roles
 
 ALTER TABLE ONLY eps.users
     ADD CONSTRAINT fk_users_department FOREIGN KEY (department_id) REFERENCES eps.departments(id);
-
-
---
--- Name: attachments fkh1ykgq46nd0ntwl28y5rvv1e2; Type: FK CONSTRAINT; Schema: eps; Owner: eps
---
-
-ALTER TABLE ONLY eps.attachments
-    ADD CONSTRAINT fkh1ykgq46nd0ntwl28y5rvv1e2 FOREIGN KEY (ticket_id) REFERENCES eps.employee_tickets(id);
 
 
 --

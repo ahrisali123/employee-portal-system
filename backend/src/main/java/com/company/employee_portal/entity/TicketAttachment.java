@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
-@Table(name = "attachments")
+@Table(name = "ticket_attachments")
 public class TicketAttachment {
 
     @Id
